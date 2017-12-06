@@ -51,9 +51,9 @@ public void receiveDetections(Detector.Detections<TextBlock> detections) {
 </ul>
 
 5.) BarcodeScanner Activity
-<ol>
+<ul>
 <li>Barcode Data is outputted in TextView.</li>
-</ol>
+</ul>
 
 ```java
 BarcodeDetector detector = new BarcodeDetector
@@ -75,9 +75,9 @@ txtView.setText(thisCode.rawValue);
 ```
 
 6.) FaceDetection Activity
-<ol>
+<ul>
 <li>Frame is placed around detected face</li>
-  </ol>
+  </ul>
 
 ```java
 FaceDetector faceDetector = new FaceDetector
