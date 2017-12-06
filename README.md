@@ -54,7 +54,8 @@ public void receiveDetections(Detector.Detections<TextBlock> detections) {
 <li>Barcode Data is outputted in TextView.</li>
 
 ```java
-BarcodeDetector detector = new BarcodeDetector.Builder(getApplicationContext())
+BarcodeDetector detector = new BarcodeDetector
+                .Builder(getApplicationContext())
                 .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
                 .build();
                 
