@@ -7,79 +7,40 @@
   <li>Application is designed in a way that user can select multiple texts to remember using <code>Floating Action Button</code>, and put them up for display using <code>RecyclerView</code>.</li>
 </ol>
 <h2>Simple Usage</h2>
+
 ```java
-protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+public class SimpleScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
+    private ZXingScannerView mScannerView;
 
-        cameraView = (SurfaceView)findViewById(R.id.surface_view);
-        textView = (TextView)findViewById(R.id.text_view);
-        fab = (FloatingActionButton)findViewById(R.id.fab);
-        btn = (Button)findViewById(R.id.button_recycler_view);
+    @Override
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
+        setContentView(mScannerView);                // Set the scanner view as the content view
+    }
 
-TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplication()).build();
-        if(!textRecognizer.isOperational()){
-            Log.w("MainActivity","Detector dependencies are not yet available.");
-        }
-        else {
-            cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
-                    .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(1280,1024)
-                    .setRequestedFps(2.0f)
-                    .setAutoFocusEnabled(true)
-                    .build();
-            cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceCreated(SurfaceHolder holder) {
-                    try{
-                        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
-                            ActivityCompat.requestPermissions(MainActivity.this,
-                                    new String[]{Manifest.permission.CAMERA},
-                                    RequestCameraPermissionId);
-                            return;
-                        }
-                        cameraSource.start(cameraView.getHolder());
-                    } catch(IOException e){
-                        e.printStackTrace();
-                    }
-                }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+        mScannerView.startCamera();          // Start camera on resume
+    }
 
-                @Override
-                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();           // Stop camera on pause
+    }
 
-                }
+    @Override
+    public void handleResult(Result rawResult) {
+        // Do something with the result here
+        Log.v(TAG, rawResult.getText()); // Prints scan results
+        Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
-                @Override
-                public void surfaceDestroyed(SurfaceHolder holder) {
-                    cameraSource.stop();
-                }
-            });
+        // If you would like to resume scanning, call this method below:
+        mScannerView.resumeCameraPreview(this);
+    }
+}
 
-            textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
-                @Override
-                public void release() {
-
-                }
-
-                @Override
-                public void receiveDetections(Detector.Detections<TextBlock> detections) {
-                    final SparseArray<TextBlock> items = detections.getDetectedItems();
-                    if (items.size() != 0){
-                        textView.post(new Runnable(){
-                            @Override
-                            public void run() {
-                                StringBuilder stringBuilder = new StringBuilder();
-                                for (int i = 0; i<items.size(); ++i){
-                                    TextBlock item = items.valueAt(i);
-                                    stringBuilder.append(item.getValue());
-                                    stringBuilder.append("\n");
-                                }
-                                read_text = stringBuilder.toString();
-                                textView.setText(read_text);
-                            }
-                        });
-                    }
-                }
-            });
-        }
 ```
