@@ -18,6 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".BarcodeScannerActivity">
+
+        </activity>
+
+        <activity android:name=".OcrActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".RecyclerViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
