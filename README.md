@@ -17,7 +17,7 @@ compile 'com.google.android.gms:play-services-vision:11.6.2'
 
 ```xml
 <uses-permission android:name="android.permission.CAMERA"/>
-<meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
+<meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"/>
 ```
 
 3.) Receive Detections
