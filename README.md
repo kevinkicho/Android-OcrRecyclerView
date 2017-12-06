@@ -43,3 +43,9 @@ public void receiveDetections(Detector.Detections<TextBlock> detections) {
     }
 }
 ```
+
+4.) RecyclerView Activity
+<ul>
+<li>ListItem that is <code>Serializable</code> is passed to RecyclerViewActivity as "data".</li>
+  <li>"data", using <code>MyAdapter</code> class, is put into view.</li>
+</ul>
