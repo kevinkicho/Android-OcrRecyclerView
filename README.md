@@ -8,6 +8,7 @@
 </ol>
 <h2>Simple Usage</h2>
 ```java
+
 TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplication()).build();
         if(!textRecognizer.isOperational()){
             Log.w("MainActivity","Detector dependencies are not yet available.");
