@@ -8,17 +8,21 @@
 </ol>
 <h2>Simple Usage</h2>
 1.) Add the Camera dependency to your build.gradle file.
-```
+
+```xml
 compile 'com.google.android.gms:play-services-vision:11.6.2'
 ```
-2.) Android Manifest
-```
-<uses-permission android:name="android.permission.CAMERA"/>
 
+2.) Android Manifest
+
+```xml
+<uses-permission android:name="android.permission.CAMERA"/>
 <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
 ```
+
 3.) Receive Detections
-```
+
+```java
 @Override
 public void receiveDetections(Detector.Detections<TextBlock> detections) {
     final SparseArray<TextBlock> items = detections.getDetectedItems();
