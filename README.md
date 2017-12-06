@@ -7,40 +7,36 @@
   <li>Application is designed in a way that user can select multiple texts to remember using <code>Floating Action Button</code>, and put them up for display using <code>RecyclerView</code>.</li>
 </ol>
 <h2>Simple Usage</h2>
+1.) Add the Camera dependency to your build.gradle file.
+```xml
+    compile 'com.google.android.gms:play-services-vision:11.6.2'
+```
+2.) Android Manifest
+``` xml
+    <uses-permission android:name="android.permission.CAMERA"/>
 
+    <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
+```
+3.) Receive Detections
 ```java
-public class SimpleScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
-    private ZXingScannerView mScannerView;
 
     @Override
-    public void onCreate(Bundle state) {
-        super.onCreate(state);
-        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
-        setContentView(mScannerView);                // Set the scanner view as the content view
+    public void receiveDetections(Detector.Detections<TextBlock> detections) {
+        final SparseArray<TextBlock> items = detections.getDetectedItems();
+        if (items.size() != 0){
+            textView.post(new Runnable(){
+                @Override
+                public void run() {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i<items.size(); ++i){
+                        TextBlock item = items.valueAt(i);
+                        stringBuilder.append(item.getValue());
+                        stringBuilder.append("\n");
+                    }
+                    read_text = stringBuilder.toString();
+                    textView.setText(read_text);
+                }
+            });
+        }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();          // Start camera on resume
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
-    }
-
-    @Override
-    public void handleResult(Result rawResult) {
-        // Do something with the result here
-        Log.v(TAG, rawResult.getText()); // Prints scan results
-        Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
-
-        // If you would like to resume scanning, call this method below:
-        mScannerView.resumeCameraPreview(this);
-    }
-}
-
 ```
