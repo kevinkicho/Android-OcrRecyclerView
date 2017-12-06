@@ -8,6 +8,14 @@
 </ol>
 <h2>Simple Usage</h2>
 ```java
+protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        cameraView = (SurfaceView)findViewById(R.id.surface_view);
+        textView = (TextView)findViewById(R.id.text_view);
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        btn = (Button)findViewById(R.id.button_recycler_view);
 
 TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplication()).build();
         if(!textRecognizer.isOperational()){
