@@ -49,3 +49,42 @@ public void receiveDetections(Detector.Detections<TextBlock> detections) {
 <li>ListItem that is <code>Serializable</code> is passed to RecyclerViewActivity as "data".</li>
   <li>"data", using <code>MyAdapter</code> class, is put into view.</li>
 </ul>
+
+5.) BarcodeScanner Activity
+
+```java
+BarcodeDetector detector = new BarcodeDetector.Builder(getApplicationContext())
+                .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
+                .build();
+if(!detector.isOperational()){
+    textView.setText("Could not set up the detector!");
+    return;
+}
+Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+SparseArray<Barcode> barcodes = detector.detect(frame);
+Barcode thisCode = barcodes.valueAt(0);
+TextView txtView = (TextView) findViewById(R.id.text_view);
+txtView.setText(thisCode.rawValue);
+```
+6.) FaceDetection Activity
+
+```java
+FaceDetector faceDetector = new
+FaceDetector.Builder(getApplicationContext()).setTrackingEnabled(false)
+.build();
+if(!faceDetector.isOperational()){
+    new AlertDialog.Builder(v.getContext()).setMessage("Could not set up the face detector!").show();
+    return;
+}
+Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+SparseArray<Face> faces = faceDetector.detect(frame);
+
+for(int i=0; i<faces.size(); i++) {
+    Face thisFace = faces.valueAt(i);
+    float x1 = thisFace.getPosition().x;
+    float y1 = thisFace.getPosition().y;
+    float x2 = x1 + thisFace.getWidth();
+    float y2 = y1 + thisFace.getHeight();
+    tempCanvas.drawRoundRect(new RectF(x1, y1, x2, y2), 2, 2, myRectPaint);
+}
+```
